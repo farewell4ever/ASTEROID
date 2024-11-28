@@ -5,12 +5,24 @@ import time
 # Initialize Pygame
 pygame.init()
 
+# Initialize the mixer for sound
+pygame.mixer.init()
+
+# Load background music
+pygame.mixer.music.load('solyanka.wav')  # Замените на имя вашего файла
+pygame.mixer.music.set_volume(0.2)  # Установите громкость (от 0.0 до 1.0)
+pygame.mixer.music.play(-1)  # Воспроизведение музыки в цикле
+
+# Load sound effects
+shoot_sound = pygame.mixer.Sound('shoot.mp3')  # Замените на имя вашего файла
+explosion_sound = pygame.mixer.Sound('destroy.mp3')  # Замените на имя вашего файла
+
 # Screen dimensions
 WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Space Invaders")
 
-# Colors
+# Color settings
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)  # For spaceship
@@ -78,6 +90,7 @@ while running:
     if keys[pygame.K_SPACE] and (current_time - last_bullet_time) > bullet_cooldown:
         bullets.append([player_x + player_width // 2 - bullet_width // 2, player_y])
         last_bullet_time = current_time
+        shoot_sound.play()  # Play shooting sound
 
     # Update bullets
     for bullet in bullets:
@@ -98,6 +111,7 @@ while running:
                 bullets.remove(bullet)
                 enemies.remove(enemy)
                 score += 1
+                explosion_sound.play()  # Play explosion sound
                 break
 
     # Respawn enemies
